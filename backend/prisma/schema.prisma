@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CitizenRequest {
+  id              String   @id @default(cuid())
+
+  message         String
+  language        String
+
+  inputMethod String @default("TEXT")
+
+  category        String
+  urgency         String
+
+  problem         String
+  affectedGroups  String[]
+
+  location        String
+  summary         String
+
+  confidence      Float
+
+  createdAt       DateTime @default(now())
+
+  @@index([category])
+  @@index([urgency])
+  @@index([location])
+  @@index([createdAt])
+  @@index([inputMethod])
+}
+
+
+model InfrastructureProfile {
+  id                  String   @id @default(cuid())
+
+  district            String
+  state               String
+
+  category            String
+
+  infrastructureGap   Float
+  populationImpact    Float
+  vulnerability       Float
+
+  totalPopulation     Int
+  affectedPopulation  Int
+
+  source              String?
+  sourceYear          Int?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([district, category])
+  @@index([district])
+  @@index([category])
+}
